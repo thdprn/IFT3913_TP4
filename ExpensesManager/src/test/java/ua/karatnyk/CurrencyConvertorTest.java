@@ -18,43 +18,24 @@ import ua.karatnyk.impl.OfflineJsonWorker;
 
 public class CurrencyConvertorTest {
 
-	private static OfflineJsonWorker offlineJson;
+	private static OfflineJsonWorker offlineJsonWorker;
     private CurrencyConversion conversion;
     private Map<String, Double> conversionRates;
 
     
     @Before
     public void init() {
-        offlineJson = new OfflineJsonWorker();
-        conversion = offlineJson.parser();;
+        offlineJsonWorker = new OfflineJsonWorker();
+        conversion = offlineJsonWorker.parser();;
         conversionRates = conversion.getRates();
     }
 
     // Tests boite noire
     
     //Partition du domaine
+    //Should pass
     @Test
-    public void testUSDCADNegative() {
-        try {
-            CurrencyConvertor.convert(-1, "USD", "CAD", conversion);
-            fail("Le montant n'est pas entre '0' et '10000' et la fonction n'a pas crash");
-        }
-        catch(Exception e) {
-            //TODO
-        }
-    }
-    @Test
-    public void testUSDCADOverLimit() {
-        try {
-            CurrencyConvertor.convert(10001, "USD", "CAD", conversion);
-            fail("Le montant n'est pas entre '0' et '10000' et la fonction n'a pas crash");
-        }
-        catch(Exception e) {
-            
-        }
-    }
-    @Test
-    public void testUSDCADLowerThreshold() {
+    public void testLowerThreshold() {
         try {
             double x = CurrencyConvertor.convert(0, "USD", "CAD", conversion);
             System.out.println(x);;
@@ -64,7 +45,7 @@ public class CurrencyConvertorTest {
         }
     }
     @Test
-    public void testUSDCADUpperThreshold() {
+    public void testUpperThreshold() {
         try {
             CurrencyConvertor.convert(10000, "USD", "CAD", conversion);
             
@@ -74,7 +55,7 @@ public class CurrencyConvertorTest {
         }
     }
     @Test
-    public void testUSDCADInside() {
+    public void testInsideInterval() {
         try {
             CurrencyConvertor.convert(5000, "USD", "CAD", conversion);
             
@@ -83,8 +64,31 @@ public class CurrencyConvertorTest {
             fail("Exception occured. '5000' inputed and function crashed");
         }
     }
+    //Should not pass
+    @Test
+    public void testUnderLimit() {
+        try {
+            CurrencyConvertor.convert(-1, "USD", "CAD", conversion);
+            fail("Le montant n'est pas entre '0' et '10000' et la fonction n'a pas crash");
+        }
+        catch(Exception e) {
+            //TODO
+        }
+    }
+    @Test
+    public void testOverLimit() {
+        try {
+            CurrencyConvertor.convert(10001, "USD", "CAD", conversion);
+            fail("Le montant n'est pas entre '0' et '10000' et la fonction n'a pas crash");
+        }
+        catch(Exception e) {
+            
+        }
+    }
+    
 
     //Verification conversions
+    //Should pass
     @Test
     public void testConversionUSDCAD() {
         try {
@@ -187,7 +191,22 @@ public class CurrencyConvertorTest {
             fail("Exception occured. TODO");
         }
     }
-    
+    //Should not pass
+    public void testConversionToEmpty(){
+        double amount = 5504;
+        String currency1 = "EUR";
+        String currency2 = "";
+
+        try {
+			CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+			assertTrue(false); // Test fails if no exception is thrown
+		} catch (ParseException e) {
+			fail("Exception occured. TODO");
+			//assertTrue(true);
+		} 
+    }
+
+
     // Tests boite blanche
 
     
