@@ -1,6 +1,8 @@
 package ua.karatnyk;
 
 import static org.junit.Assert.*;
+
+import java.io.Console;
 import java.text.ParseException;
 import java.util.Map;
 
@@ -16,15 +18,17 @@ import ua.karatnyk.impl.OfflineJsonWorker;
 
 public class CurrencyConvertorTest {
 
-	private CurrencyConversion conversion;
+	private static OfflineJsonWorker offlineJson;
+    private CurrencyConversion conversion;
     private Map<String, Double> conversionRates;
 
-	
-	@Before
-	public void init() {
-        conversion = new CurrencyConversion();
+    
+    @Before
+    public void init() {
+        offlineJson = new OfflineJsonWorker();
+        conversion = offlineJson.parser();;
         conversionRates = conversion.getRates();
-	}
+    }
 
     // Tests boite noire
     
@@ -52,8 +56,8 @@ public class CurrencyConvertorTest {
     @Test
     public void testUSDCADLowerThreshold() {
         try {
-            CurrencyConvertor.convert(0, "USD", "CAD", conversion);
-            
+            double x = CurrencyConvertor.convert(0, "USD", "CAD", conversion);
+            System.out.println(x);;
         }
         catch(Exception e) {
             fail("Exception occured. '0' inputed and function crashed");
@@ -82,22 +86,108 @@ public class CurrencyConvertorTest {
 
     //Verification conversions
     @Test
-    public void testUSDCAD() {
+    public void testConversionUSDCAD() {
         try {
+            double amount = 3576;
             String currency1 = "USD";
             String currency2 = "CAD";
 
-            double amount = 376.0;
-            double amountConverted = CurrencyConvertor.convert(5000, "USD", "CAD", conversion);
+            double amountConverted = CurrencyConvertor.convert(amount, currency1, currency2, conversion);
             
-            Bool passed = amount/rates
+            double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
+            assertTrue("Message" , amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. '5000' inputed and function crashed");
+            fail("Exception occured. TODO");
         }
     }
+    @Test
+    public void testConversionCADGBP(){
+        try {
+            double amount = 103;
+            String currency1 = "CAD";
+            String currency2 = "GBP";
 
+            double amountConverted = CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            
+            double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
+
+            assertTrue("Message" , amountConverted == amountCalculated);
+        }
+        catch(Exception e) {
+            fail("Exception occured. TODO");
+        }
+    }
+    @Test
+    public void testConversionGBPEUR(){
+        try {
+            double amount = 9853;
+            String currency1 = "GBP";
+            String currency2 = "EUR";
+
+            double amountConverted = CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            
+            double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
+
+            assertTrue("Message" , amountConverted == amountCalculated);
+        }
+        catch(Exception e) {
+            fail("Exception occured. TODO");
+        }
+    }
+    @Test
+    public void testConversionEURCHF(){
+        try {
+            double amount = 503.3;
+            String currency1 = "EUR";
+            String currency2 = "CHF";
+
+            double amountConverted = CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            
+            double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
+
+            assertTrue("Message" , amountConverted == amountCalculated);
+        }
+        catch(Exception e) {
+            fail("Exception occured. TODO");
+        }
+    }
+    @Test
+    public void testConversionCHFINR(){
+        try {
+            double amount = 24.9;
+            String currency1 = "CHF";
+            String currency2 = "INR";
+
+            double amountConverted = CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            
+            double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
+
+            assertTrue("Message" , amountConverted == amountCalculated);
+        }
+        catch(Exception e) {
+            fail("Exception occured. TODO");
+        }
+    }
+    @Test
+    public void testConversionINRAUD(){
+        try {
+            double amount = 5680;
+            String currency1 = "INR";
+            String currency2 = "AUD";
+
+            double amountConverted = CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            
+            double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
+
+            assertTrue("Message" , amountConverted == amountCalculated);
+        }
+        catch(Exception e) {
+            fail("Exception occured. TODO");
+        }
+    }
+    
     // Tests boite blanche
 
     
