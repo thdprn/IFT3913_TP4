@@ -30,10 +30,10 @@ public class CurrencyConvertorTest {
         conversionRates = conversion.getRates();
     }
 
-    // Tests boite noire
+
+    // BOITE NOIRE
     
-    //Partition du domaine
-    //Should pass
+    //#region Partition du domaine
     @Test
     public void testLowerThreshold() {
         try {
@@ -64,12 +64,11 @@ public class CurrencyConvertorTest {
             fail("Exception occured. '5000' inputed and function crashed");
         }
     }
-    //Should not pass
     @Test
     public void testUnderLimit() {
         try {
             CurrencyConvertor.convert(-1, "USD", "CAD", conversion);
-            fail("Le montant n'est pas entre '0' et '10000' et la fonction n'a pas crash");
+            fail("Le montant est inférieur à '0' et la fonction n'a pas crash");
         }
         catch(Exception e) {
             //TODO
@@ -79,16 +78,15 @@ public class CurrencyConvertorTest {
     public void testOverLimit() {
         try {
             CurrencyConvertor.convert(10001, "USD", "CAD", conversion);
-            fail("Le montant n'est pas entre '0' et '10000' et la fonction n'a pas crash");
+            fail("Le montant est supérieur à '10000' et la fonction n'a pas crash");
         }
         catch(Exception e) {
             
         }
     }
-    
+    //#endregion
 
-    //Verification conversions
-    //Should pass
+    //#region Verification conversions
     @Test
     public void testConversionUSDCAD() {
         try {
@@ -100,10 +98,10 @@ public class CurrencyConvertorTest {
             
             double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
-            assertTrue("Message" , amountConverted == amountCalculated);
+            assertTrue("Conversion failed, incorrect output", amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. TODO");
+            fail("Exception occured. Inputs should be accepted but function crashed");
         }
     }
     @Test
@@ -117,10 +115,10 @@ public class CurrencyConvertorTest {
             
             double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
-            assertTrue("Message" , amountConverted == amountCalculated);
+            assertTrue("Conversion failed, incorrect output" , amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. TODO");
+            fail("Exception occured. Inputs should be accepted but function crashed");
         }
     }
     @Test
@@ -134,10 +132,10 @@ public class CurrencyConvertorTest {
             
             double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
-            assertTrue("Message" , amountConverted == amountCalculated);
+            assertTrue("Conversion failed, incorrect output" , amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. TODO");
+            fail("Exception occured. Inputs should be accepted but function crashed");
         }
     }
     @Test
@@ -151,10 +149,10 @@ public class CurrencyConvertorTest {
             
             double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
-            assertTrue("Message" , amountConverted == amountCalculated);
+            assertTrue("Conversion failed, incorrect output" , amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. TODO");
+            fail("Exception occured. Inputs should be accepted but function crashed");
         }
     }
     @Test
@@ -168,10 +166,10 @@ public class CurrencyConvertorTest {
             
             double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
-            assertTrue("Message" , amountConverted == amountCalculated);
+            assertTrue("Conversion failed, incorrect output" , amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. TODO");
+            fail("Exception occured. Inputs should be accepted but function crashed");
         }
     }
     @Test
@@ -185,29 +183,152 @@ public class CurrencyConvertorTest {
             
             double amountCalculated = amount/conversionRates.get(currency1)*conversionRates.get(currency2);
 
-            assertTrue("Message" , amountConverted == amountCalculated);
+            assertTrue("Conversion failed, incorrect output" , amountConverted == amountCalculated);
         }
         catch(Exception e) {
-            fail("Exception occured. TODO");
+            fail("Exception occured. Inputs should be accepted but function crashed");
         }
     }
-    //Should not pass
+    @Test
     public void testConversionToEmpty(){
-        double amount = 5504;
-        String currency1 = "EUR";
-        String currency2 = "";
-
         try {
-			CurrencyConvertor.convert(amount, currency1, currency2, conversion);
-			assertTrue(false); // Test fails if no exception is thrown
-		} catch (ParseException e) {
-			fail("Exception occured. TODO");
-			//assertTrue(true);
-		} 
+            double amount = 5680;
+            String currency1 = "USD";
+            String currency2 = "";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. Empty string inputed and conversion did not crash");
+        }
+        catch(Exception e) {
+        }
     }
+    @Test
+    public void testConversionFromEmpty(){
+        try {
+            double amount = 5680;
+            String currency1 = "";
+            String currency2 = "CAD";
 
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. Empty string inputed and conversion did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    @Test
+    public void testConversionUSDMXN(){
+        try {
+            double amount = 5680;
+            String currency1 = "USD";
+            String currency2 = "MXN";
 
-    // Tests boite blanche
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. 'MXN' inputed as 'to' and not accepted currency. Function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    @Test
+    public void testConversionBOBUSD(){
+        try {
+            double amount = 5680;
+            String currency1 = "BOB";
+            String currency2 = "USD";
 
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. 'BOB' inputed as 'from' and not accepted currency. Function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    @Test
+    public void testConversionETHUSD(){
+        try {
+            double amount = 5680;
+            String currency1 = "ETH";
+            String currency2 = "USD";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. 'ETH' not in currency list and function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    //#endregion
     
+
+
+    // BOITE BLANCHE
+    
+    //#region Couverture des intructions
+    @Test
+    public void testEnterElse(){
+        try {
+            double amount = 9999;
+            String currency1 = "CAD";
+            String currency2 = "USD";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+        }
+        catch(Exception e) {
+            fail("Exception occured. Currencies accepted but function crashed");
+        }
+    }
+    @Test
+    public void testEnterIf(){
+        try {
+            double amount = 20;
+            String currency1 = "";
+            String currency2 = "";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. '' not in currency list and function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    //#endregion
+
+    //#region Critère de couverture des conditions (et des arcs)
+    @Test
+    public void testEnterIfFirstWrong(){
+        try {
+            double amount = 20;
+            String currency1 = "DOGE";
+            String currency2 = "USD";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. 'DOGE' not in currency list and function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    @Test
+    public void testEnterIfSecondWrong(){
+        try {
+            double amount = 20;
+            String currency1 = "CAD";
+            String currency2 = "SOL";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. 'SOL' not in currency list and function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    @Test
+    public void testEnterIfBothWrong(){
+        try {
+            double amount = 20;
+            String currency1 = "ADA";
+            String currency2 = "MATIC";
+
+            CurrencyConvertor.convert(amount, currency1, currency2, conversion);
+            fail("Exception occured. 'ADA' & 'MATIC' not in currency list and function did not crash");
+        }
+        catch(Exception e) {
+        }
+    }
+    //#endregion
+
 }
